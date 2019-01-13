@@ -1,0 +1,30 @@
+{
+    "name": "lukaswerner/php-csv",
+    "description": "A simple csv processing library for php",
+    "type": "library",
+    "keywords": ["csv", "import", "processing", "read", "write", "chunk"],
+    "license": "GPL-3.0-or-later",
+    "authors": [
+        {
+            "name": "Lukas Werner",
+            "email": "kontakt@lwerner.de"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=7.1.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.7"
+    },
+    "autoload": {
+        "psr-4": {
+            "PhpCsv\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "PhpCsvTest\\": "test"
+        }
+    }
+}
