@@ -50,11 +50,6 @@ class Csv
     private $containsHeader = true;
 
     /**
-     * @var array|null
-     */
-    private $header;
-
-    /**
      * @var int
      */
     private $lineLength;
@@ -262,21 +257,22 @@ class Csv
      */
     public function header(bool $rewind = true): ?array
     {
-        if ($this->header === null && $this->containsHeader) {
+        $header = null;
+        if ($this->containsHeader) {
             if (!$this->isOpen()) {
                 $this->open();
             }
 
             $position = ftell($this->handle);
             rewind($this->handle);
-            $this->header = $this->readLine();
+            $header = $this->readLine();
 
             if ($rewind) {
                 fseek($this->handle, $position);
             }
         }
 
-        return $this->header;
+        return $header;
     }
 
     /**

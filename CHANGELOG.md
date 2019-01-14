@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to `php-csv` will be documented in this file
 
+## 0.2.3 - 2018-01-14
+### Fixed
+- Always read header again due to file pointer issues.
+
 ## 0.2.2 - 2018-01-14
 ### Fixed
 - `$csv->rows()` wasn't able to deal with empty lines at the end of the file.
