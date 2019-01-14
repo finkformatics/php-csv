@@ -48,20 +48,6 @@ class CsvTest extends TestCase
     }
 
     /**
-     * Tests if readLine() throws an exception on empty files
-     *
-     * @expectedException \PhpCsv\Exception\ReadLineException
-     * @expectedExceptionMessageRegExp /Unknown error occurred, while trying to read line from file \".*files\/file_03\.csv\"/
-     */
-    public function testReadLineExceptionEmptyFile(): void
-    {
-        $fileInfo = new SplFileInfo(__DIR__ . '/files/file_03.csv');
-        $csv = new Csv($fileInfo);
-        /** @noinspection PhpUnhandledExceptionInspection */
-        $csv->header();
-    }
-
-    /**
      * Tests if readLine() throws an exception if column counts don't match
      *
      * @expectedException \PhpCsv\Exception\ReadLineException

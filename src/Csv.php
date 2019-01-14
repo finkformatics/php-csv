@@ -302,11 +302,8 @@ class Csv
         $lineCount = 0;
         while (!feof($this->handle)) {
             $row = $this->readLine();
-
             if ($row === null) {
-                throw new ReadLineException(
-                    sprintf('Could not read next line in file "%s".', $this->fileInfo->getPathname())
-                );
+                break;
             }
 
             if ($this->containsHeader && isset($header) && count($header) !== count($row)) {
@@ -432,7 +429,11 @@ class Csv
         }
 
         $row = fgetcsv($this->handle, $this->lineLength, $this->delimiter, $this->enclosure, $this->escape);
-        if ($row === false || $row === null) {
+        if ($row === false) {
+            return null;
+        }
+
+        if ($row === null) {
             throw new ReadLineException(
                 sprintf(
                     'Unknown error occurred, while trying to read line from file "%s"',
