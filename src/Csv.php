@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace PhpCsv;
 
-use \Closure;
 use \Generator;
 use \SplFileInfo;
 
@@ -331,15 +330,15 @@ class Csv
      * Processes csv file by using callbacks. $rowCallback will be executed for each row, $chunkCallback, if set,
      * will be executed after each chunk. Chunk size can be set.
      *
-     * @param Closure $rowCallback necessary row callback to process each row
-     * @param Closure|null $chunkCallback optional chunk callback to process each chunk
+     * @param callable $rowCallback necessary row callback to process each row
+     * @param callable|null $chunkCallback optional chunk callback to process each chunk
      *
      * @return int|null number of rows examined or null if aborted processing
      * @throws FileNotFoundException if csv file was not found
      * @throws InvalidStateException if open(...) produces errors
      * @throws ReadLineException if line could not be read
      */
-    public function process(Closure $rowCallback, ?Closure $chunkCallback = null): ?int
+    public function process(callable $rowCallback, ?callable $chunkCallback = null): ?int
     {
         $lineCount = 0;
         $rowsGenerator = $this->rows();

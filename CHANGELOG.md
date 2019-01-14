@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to `php-csv` will be documented in this file
 
+## 0.2.1 - 2018-01-14
+### Fixed
+- `$csv->process($rowCallback, $chunkCallback)` was type hinted as `\Closure`, now as `callable`
+
 ## 0.2.0 - 2018-01-14
 ### Added
 - Generators will now return number of lines, if not aborted
