@@ -36,6 +36,21 @@ You can easily count the number of lines in your csv file by calling `$csv->coun
 will only once examine all lines. On second call it will use its previously set value. To avoid that,
 you have to create a new object of `\PhpCsv\Csv`.
 
+#### Generator return values
+The generator, created with `$csv->rows()` call will now have a return value if not aborted. That means,
+after iterating through **all** lines in your CSV file, you can get the line count as
+the generator return. Do something like this:
+```
+$rowsGenerator = $csv->rows();
+foreach ($rowsGenerator as $row) {
+    // Do something
+}
+
+$numberOfLines = (int)$rowsGenerator->getReturn();
+```
+Please note, that this will throw an exception, if you use break in your loop. Just like that, the
+`$csv->process()` will now return that generator return value or null, if aborted.
+
 ### Reading header
 You can read the header fields by calling `$csv->header();`. This will return an array of strings with header information.
 This method will only once examine all lines. On second call it will use its previously set value. To avoid that,

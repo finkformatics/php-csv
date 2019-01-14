@@ -323,6 +323,8 @@ class Csv
                 yield $lineCount => $row;
             }
         }
+
+        return $lineCount;
     }
 
     /**
@@ -332,16 +334,19 @@ class Csv
      * @param Closure $rowCallback necessary row callback to process each row
      * @param Closure|null $chunkCallback optional chunk callback to process each chunk
      *
-     * @return Csv fluent interface
+     * @return int|null number of rows examined or null if aborted processing
      * @throws FileNotFoundException if csv file was not found
      * @throws InvalidStateException if open(...) produces errors
      * @throws ReadLineException if line could not be read
      */
-    public function process(Closure $rowCallback, ?Closure $chunkCallback = null): self
+    public function process(Closure $rowCallback, ?Closure $chunkCallback = null): ?int
     {
         $lineCount = 0;
-        foreach ($this->rows() as $lineCount => $row) {
+        $rowsGenerator = $this->rows();
+        $aborted = false;
+        foreach ($rowsGenerator as $lineCount => $row) {
             if ($rowCallback($row, $lineCount) === false) {
+                $aborted = true;
                 break;
             }
 
@@ -354,7 +359,11 @@ class Csv
             $chunkCallback($lineCount);
         }
 
-        return $this;
+        if ($aborted) {
+            return null;
+        }
+
+        return (int)$rowsGenerator->getReturn();
     }
 
     /**

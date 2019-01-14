@@ -147,7 +147,8 @@ class CsvTest extends TestCase
         $fileInfo = new SplFileInfo(__DIR__ . '/files/file_01.csv');
         $csv = new Csv($fileInfo);
         /** @noinspection PhpUnhandledExceptionInspection */
-        foreach ($csv->rows() as $lineCount => $row) {
+        $rowsGenerator = $csv->rows();
+        foreach ($rowsGenerator as $lineCount => $row) {
             switch ($lineCount) {
                 case 1:
                     $this->assertSame(['field1' => 'a', 'field2' => 'b', 'field3' => 'c'], $row);
@@ -166,6 +167,7 @@ class CsvTest extends TestCase
                     break;
             }
         }
+        $this->assertSame(5, $rowsGenerator->getReturn());
         $this->assertTrue($csv->isOpen());
         $csv->close();
         $this->assertFalse($csv->isOpen());
@@ -174,7 +176,8 @@ class CsvTest extends TestCase
         $csv = new Csv($fileInfo);
         $csv->setContainsHeader(false);
         /** @noinspection PhpUnhandledExceptionInspection */
-        foreach ($csv->rows() as $lineCount => $row) {
+        $rowsGenerator = $csv->rows();
+        foreach ($rowsGenerator as $lineCount => $row) {
             switch ($lineCount) {
                 case 1:
                     $this->assertSame(['a', 'b', 'c'], $row);
@@ -193,6 +196,7 @@ class CsvTest extends TestCase
                     break;
             }
         }
+        $this->assertSame(5, $rowsGenerator->getReturn());
         $this->assertTrue($csv->isOpen());
         $csv->close();
         $this->assertFalse($csv->isOpen());
@@ -206,7 +210,7 @@ class CsvTest extends TestCase
         $fileInfo = new SplFileInfo(__DIR__ . '/files/file_01.csv');
         $csv = new Csv($fileInfo);
         /** @noinspection PhpUnhandledExceptionInspection */
-        $csv->process(
+        $rowsExamined = $csv->process(
             function (array $row, int $lineCount): bool {
                 $this->lineBuffer[$lineCount] = $row;
 
@@ -221,6 +225,7 @@ class CsvTest extends TestCase
             5 => ['field1' => 'm', 'field2' => 'n', 'field3' => 'o'],
         ];
         $this->assertSame($expected, $this->lineBuffer);
+        $this->assertSame(5, $rowsExamined);
         $this->assertTrue($csv->isOpen());
         $csv->close();
         $this->assertFalse($csv->isOpen());
@@ -229,7 +234,7 @@ class CsvTest extends TestCase
         $csv = new Csv($fileInfo);
         $this->lineBuffer = [];
         /** @noinspection PhpUnhandledExceptionInspection */
-        $csv->process(
+        $rowsExamined = $csv->process(
             function (array $row, int $lineCount): bool {
                 $this->lineBuffer[$lineCount] = $row;
 
@@ -242,6 +247,7 @@ class CsvTest extends TestCase
             3 => ['field1' => 'g', 'field2' => 'h', 'field3' => 'i'],
         ];
         $this->assertSame($expected, $this->lineBuffer);
+        $this->assertNull($rowsExamined);
         $this->assertTrue($csv->isOpen());
         $csv->close();
         $this->assertFalse($csv->isOpen());
@@ -250,7 +256,7 @@ class CsvTest extends TestCase
         $csv = new Csv($fileInfo);
         $this->lineBuffer = [];
         /** @noinspection PhpUnhandledExceptionInspection */
-        $csv->process(
+        $rowsExamined = $csv->process(
             function (array $row, int $lineCount): bool {
                 $this->lineBuffer[$lineCount] = $row;
 
@@ -274,6 +280,7 @@ class CsvTest extends TestCase
             'field3' => 'cfilo',
         ];
         $this->assertSame($expected, $this->chunkBuffer);
+        $this->assertSame(5, $rowsExamined);
         $this->assertTrue($csv->isOpen());
         $csv->close();
         $this->assertFalse($csv->isOpen());
